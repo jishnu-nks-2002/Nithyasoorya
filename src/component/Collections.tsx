@@ -1,97 +1,48 @@
+'use client';
+
 import { useState } from "react";
 
 const ALL = "All";
 
 const FILTERS = {
-  material: ["All", "Crystal", "Resin", "Amethyst", "Obsidian", "Copper"],
-  series: ["All", "Violet Series", "Lunar Vol", "Origin Series", "Flow Series", "Sacred"],
+  material:     ["All", "Crystal", "Resin", "Amethyst", "Obsidian", "Copper"],
+  series:       ["All", "Violet Series", "Lunar Vol", "Origin Series", "Flow Series", "Sacred"],
   availability: ["All", "Available", "Inquire", "Sold Out"],
 };
 
 const products = [
-  {
-    id: 1,
-    name: "Eternal Koi Reflection",
-    series: "Sacred",
-    material: "Hand-painted Resin & Slate",
-    availability: "Available",
-    price: "$1,580",
-    img: "/images/p-1.jpeg",
-  },
-  {
-    id: 2,
-    name: "Moonstone River",
-    series: "Lunar Vol",
-    material: "Moonstone & Silver Leaf",
-    availability: "Inquire",
-    price: "$2,100",
-    img: "/images/p-2.jpeg",
-  },
-  {
-    id: 3,
-    name: "Sacred Geometry Shrine",
-    series: "Origin Series",
-    material: "Obsidian & Gold Plating",
-    availability: "Inquire",
-    price: "$3,400",
-    img: "/images/p-3.jpeg",
-  },
-  {
-    id: 4,
-    name: "Aetherial Flux I",
-    series: "Violet Series",
-    material: "Resin & Amethyst Chips",
-    availability: "Available",
-    price: "$1,250",
-    img: "/images/p-4.jpeg",
-  },
-  {
-    id: 5,
-    name: "Geode Resonance",
-    series: "Origin Series",
-    material: "Amethyst & Brass",
-    availability: "Inquire",
-    price: "$2,800",
-    img: "/images/p-5.jpeg",
-  },
-  {
-    id: 6,
-    name: "Selenic Fragment",
-    series: "Lunar Vol",
-    material: "Crystal & Silver Wire",
-    availability: "Available",
-    price: "$1,890",
-    img: "/images/p-6.jpeg ",
-  },
-  {
-    id: 7,
-    name: "Copper Veil",
-    series: "Origin Series",
-    material: "Copper & Raw Quartz",
-    availability: "Sold Out",
-    price: "$2,800",
-    img: "/images/p-4.jpeg",
-  },
-  {
-    id: 8,
-    name: "Amethyst Cathedral",
-    series: "Violet Series",
-    material: "Amethyst & Gold Leaf",
-    availability: "Available",
-    price: "$4,200",
-    img: "/images/p-2.jpeg",
-  },
-  {
-    id: 9,
-    name: "Prismatic Flow",
-    series: "Flow Series",
-    material: "Resin & Citrine",
-    availability: "Available",
-    price: "$980",
-    img: "/images/p-1.jpeg",
-  },
+  { id: 1, name: "Eternal Koi Reflection",  series: "Sacred",        material: "Hand-painted Resin & Slate", availability: "Available", price: "$1,580", img: "/images/p-1.jpeg" },
+  { id: 2, name: "Moonstone River",          series: "Lunar Vol",     material: "Moonstone & Silver Leaf",    availability: "Inquire",   price: "$2,100", img: "/images/p-2.jpeg" },
+  { id: 3, name: "Sacred Geometry Shrine",   series: "Origin Series", material: "Obsidian & Gold Plating",   availability: "Inquire",   price: "$3,400", img: "/images/p-3.jpeg" },
+  { id: 4, name: "Aetherial Flux I",         series: "Violet Series", material: "Resin & Amethyst Chips",    availability: "Available", price: "$1,250", img: "/images/p-4.jpeg" },
+  { id: 5, name: "Geode Resonance",          series: "Origin Series", material: "Amethyst & Brass",          availability: "Inquire",   price: "$2,800", img: "/images/p-5.jpeg" },
+  { id: 6, name: "Selenic Fragment",         series: "Lunar Vol",     material: "Crystal & Silver Wire",     availability: "Available", price: "$1,890", img: "/images/p-6.jpeg" },
+  { id: 7, name: "Copper Veil",              series: "Origin Series", material: "Copper & Raw Quartz",       availability: "Sold Out",  price: "$2,800", img: "/images/p-4.jpeg" },
+  { id: 8, name: "Amethyst Cathedral",       series: "Violet Series", material: "Amethyst & Gold Leaf",     availability: "Available", price: "$4,200", img: "/images/p-2.jpeg" },
+  { id: 9, name: "Prismatic Flow",           series: "Flow Series",   material: "Resin & Citrine",           availability: "Available", price: "$980",   img: "/images/p-1.jpeg" },
 ];
 
+// ── Types ──────────────────────────────────────────────────────────────────────
+interface Product {
+  id: number;
+  name: string;
+  series: string;
+  material: string;
+  availability: string;
+  price: string;
+  img: string;
+}
+
+type FormState = {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+};
+
+type FilterKey = "material" | "series" | "availability";
+
+// ── FilterDropdown ─────────────────────────────────────────────────────────────
 function FilterDropdown({ label, options, value, onChange }: {
   label: string;
   options: string[];
@@ -153,8 +104,12 @@ function FilterDropdown({ label, options, value, onChange }: {
   );
 }
 
-// ── Product Card — matches the screenshot: photo on top, info below ──
-function ProductCard({ product, index, onInquire }) {
+// ── Product Card ───────────────────────────────────────────────────────────────
+function ProductCard({ product, index, onInquire }: {
+  product: Product;
+  index: number;
+  onInquire: (p: Product) => void;
+}) {
   const [hov, setHov] = useState(false);
   const waText = encodeURIComponent(`Hello, I'm interested in "${product.name}" (${product.series}). Could you share more details?`);
   const waLink = `https://wa.me/919876543210?text=${waText}`;
@@ -176,7 +131,7 @@ function ProductCard({ product, index, onInquire }) {
         cursor: "pointer",
       }}
     >
-      {/* ── Photo ── */}
+      {/* Photo */}
       <div style={{ position: "relative", overflow: "hidden", aspectRatio: "4/3", flexShrink: 0 }}>
         <img
           src={product.img}
@@ -217,23 +172,20 @@ function ProductCard({ product, index, onInquire }) {
           )}
         </div>
 
-        {/* Hover overlay with quick-action buttons */}
+        {/* Hover overlay */}
         <div style={{
           position: "absolute", inset: 0, zIndex: 3,
           background: "linear-gradient(to top, rgba(20,8,45,0.55) 0%, transparent 50%)",
           opacity: hov ? 1 : 0,
           transition: "opacity 0.35s ease",
           display: "flex", alignItems: "flex-end", justifyContent: "center",
-          padding: "0 16px 16px",
-          gap: 8,
+          padding: "0 16px 16px", gap: 8,
         }}>
-          {/* View Details */}
           <a
             href={`/product/${product.id}`}
             onClick={e => e.stopPropagation()}
             style={{
-              flex: 1,
-              display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
+              flex: 1, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
               padding: "9px 0",
               fontFamily: "'Jost', sans-serif", fontSize: 8.5, fontWeight: 500,
               letterSpacing: "0.2em", textTransform: "uppercase",
@@ -251,21 +203,17 @@ function ProductCard({ product, index, onInquire }) {
             </svg>
           </a>
 
-          {/* WhatsApp */}
           {!soldOut && (
             <a
-              href={waLink}
-              target="_blank" rel="noopener noreferrer"
-              onClick={e => e.stopPropagation()}
-              title="Chat on WhatsApp"
+              href={waLink} target="_blank" rel="noopener noreferrer"
+              onClick={e => e.stopPropagation()} title="Chat on WhatsApp"
               style={{
                 width: 36, height: 36,
                 display: "inline-flex", alignItems: "center", justifyContent: "center",
                 background: "rgba(37,160,96,0.85)", backdropFilter: "blur(8px)",
                 border: "1px solid rgba(37,160,96,0.5)", borderRadius: 3,
                 color: "#fff", textDecoration: "none",
-                transition: "background 0.25s",
-                flexShrink: 0,
+                transition: "background 0.25s", flexShrink: 0,
               }}
               onMouseEnter={e => { e.currentTarget.style.background = "rgba(37,160,96,1)"; }}
               onMouseLeave={e => { e.currentTarget.style.background = "rgba(37,160,96,0.85)"; }}
@@ -279,19 +227,14 @@ function ProductCard({ product, index, onInquire }) {
         </div>
       </div>
 
-      {/* ── Info block — matches screenshot exactly ── */}
+      {/* Info block */}
       <div style={{ padding: "18px 20px 20px", display: "flex", flexDirection: "column", gap: 0, flex: 1 }}>
-
-        {/* Product name */}
         <div style={{
           fontFamily: "'Jost', sans-serif", fontSize: 15, fontWeight: 500,
-          color: "#1a1030", letterSpacing: "0.01em", marginBottom: 4,
-          lineHeight: 1.3,
+          color: "#1a1030", letterSpacing: "0.01em", marginBottom: 4, lineHeight: 1.3,
         }}>
           {product.name}
         </div>
-
-        {/* Material — italic serif, muted */}
         <div style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: 13, fontStyle: "italic", fontWeight: 300,
@@ -300,13 +243,8 @@ function ProductCard({ product, index, onInquire }) {
           {product.material}
         </div>
 
-        {/* Bottom row: price + inquire button */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginTop: "auto" }}>
-          <span style={{
-            fontFamily: "'Jost', sans-serif",
-            fontSize: 15, fontWeight: 600,
-            color: "#6b3fa0", letterSpacing: "0.02em",
-          }}>
+          <span style={{ fontFamily: "'Jost', sans-serif", fontSize: 15, fontWeight: 600, color: "#6b3fa0", letterSpacing: "0.02em" }}>
             {product.price}
           </span>
 
@@ -316,14 +254,11 @@ function ProductCard({ product, index, onInquire }) {
               style={{
                 fontFamily: "'Jost', sans-serif", fontSize: 8.5, fontWeight: 500,
                 letterSpacing: "0.2em", textTransform: "uppercase",
-                color: "#6b3fa0",
-                padding: "7px 16px",
-                background: "transparent",
+                color: "#6b3fa0", padding: "7px 16px", background: "transparent",
                 border: "1.5px solid rgba(107,63,160,0.3)",
                 borderRadius: 2, cursor: "pointer",
                 backgroundImage: "linear-gradient(to right, #6b3fa0 50%, transparent 50%)",
-                backgroundSize: "200% 100%",
-                backgroundPosition: "right center",
+                backgroundSize: "200% 100%", backgroundPosition: "right center",
                 transition: "background-position 0.4s cubic-bezier(0.4,0,0.2,1), color 0.35s ease, border-color 0.35s ease",
               }}
               onMouseEnter={e => {
@@ -343,8 +278,7 @@ function ProductCard({ product, index, onInquire }) {
           {soldOut && (
             <span style={{
               fontFamily: "'Jost', sans-serif", fontSize: 8.5, fontWeight: 400,
-              letterSpacing: "0.18em", textTransform: "uppercase",
-              color: "#c0b0cc",
+              letterSpacing: "0.18em", textTransform: "uppercase", color: "#c0b0cc",
             }}>Sold Out</span>
           )}
         </div>
@@ -353,13 +287,16 @@ function ProductCard({ product, index, onInquire }) {
   );
 }
 
-// ── Inquire Modal ──
-function InquireModal({ product, onClose }) {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
-  const [focused, setFocused] = useState(null);
+// ── Inquire Modal ──────────────────────────────────────────────────────────────
+function InquireModal({ product, onClose }: {
+  product: Product;
+  onClose: () => void;
+}) {
+  const [form, setForm]       = useState<FormState>({ name: "", email: "", phone: "", message: "" });
+  const [focused, setFocused] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const field = (key, label, placeholder, type = "text") => (
+  const field = (key: keyof FormState, label: string, placeholder: string, type = "text") => (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <label style={{
         fontFamily: "'Jost', sans-serif", fontSize: 8.5,
@@ -413,7 +350,8 @@ function InquireModal({ product, onClose }) {
                 <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 26, fontWeight: 400, color: "#1a1030", letterSpacing: "0.02em", lineHeight: 1.1 }}>{product.name}</h2>
                 <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 13, fontStyle: "italic", color: "#a090b8", marginTop: 3 }}>{product.material}</p>
               </div>
-              <button onClick={onClose} style={{ width: 30, height: 30, borderRadius: "50%", border: "1px solid rgba(107,63,160,0.2)", background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#b0a0cc", flexShrink: 0, marginTop: 2 }}
+              <button onClick={onClose}
+                style={{ width: 30, height: 30, borderRadius: "50%", border: "1px solid rgba(107,63,160,0.2)", background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#b0a0cc", flexShrink: 0, marginTop: 2 }}
                 onMouseEnter={e => { e.currentTarget.style.background = "rgba(107,63,160,0.07)"; e.currentTarget.style.color = "#6b3fa0"; }}
                 onMouseLeave={e => { e.currentTarget.style.background = "none"; e.currentTarget.style.color = "#b0a0cc"; }}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -423,8 +361,8 @@ function InquireModal({ product, onClose }) {
             {/* Form */}
             <div style={{ padding: "28px 40px 36px", display: "flex", flexDirection: "column", gap: 18 }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-                {field("name", "Full Name", "Your name")}
-                {field("email", "Email", "you@example.com", "email")}
+                {field("name",  "Full Name",     "Your name")}
+                {field("email", "Email",         "you@example.com", "email")}
               </div>
               {field("phone", "Phone Number", "+91 00000 00000", "tel")}
 
@@ -449,7 +387,6 @@ function InquireModal({ product, onClose }) {
 
               {/* Actions */}
               <div style={{ display: "flex", gap: 10, alignItems: "center", justifyContent: "flex-end", paddingTop: 4 }}>
-                {/* WhatsApp alt */}
                 <a
                   href={`https://wa.me/919876543210?text=${encodeURIComponent(`Hello, I'm interested in "${product.name}". Could you share more details?`)}`}
                   target="_blank" rel="noopener noreferrer"
@@ -457,10 +394,8 @@ function InquireModal({ product, onClose }) {
                     display: "inline-flex", alignItems: "center", gap: 7,
                     fontFamily: "'Jost', sans-serif", fontSize: 8.5, fontWeight: 500,
                     letterSpacing: "0.18em", textTransform: "uppercase",
-                    color: "#25a060", padding: "10px 18px",
-                    background: "transparent",
-                    border: "1.5px solid rgba(37,160,96,0.3)",
-                    borderRadius: 2, textDecoration: "none",
+                    color: "#25a060", padding: "10px 18px", background: "transparent",
+                    border: "1.5px solid rgba(37,160,96,0.3)", borderRadius: 2, textDecoration: "none",
                     backgroundImage: "linear-gradient(to right, #25a060 50%, transparent 50%)",
                     backgroundSize: "200% 100%", backgroundPosition: "right center",
                     transition: "background-position 0.4s cubic-bezier(0.4,0,0.2,1), color 0.35s, border-color 0.35s",
@@ -474,7 +409,6 @@ function InquireModal({ product, onClose }) {
                   WhatsApp
                 </a>
 
-                {/* Submit */}
                 <button
                   onClick={() => { if (form.name && form.email) setSubmitted(true); }}
                   disabled={!form.name || !form.email}
@@ -482,8 +416,7 @@ function InquireModal({ product, onClose }) {
                     fontFamily: "'Jost', sans-serif", fontSize: 8.5, fontWeight: 500,
                     letterSpacing: "0.22em", textTransform: "uppercase",
                     color: (!form.name || !form.email) ? "#c0b0d8" : "#6b3fa0",
-                    padding: "10px 24px",
-                    background: "transparent",
+                    padding: "10px 24px", background: "transparent",
                     border: `1.5px solid ${(!form.name || !form.email) ? "rgba(107,63,160,0.12)" : "rgba(107,63,160,0.35)"}`,
                     borderRadius: 2, cursor: (!form.name || !form.email) ? "not-allowed" : "pointer",
                     backgroundImage: (!form.name || !form.email) ? "none" : "linear-gradient(to right, #6b3fa0 50%, transparent 50%)",
@@ -506,15 +439,17 @@ function InquireModal({ product, onClose }) {
   );
 }
 
-// ── Main Page ──
+// ── Main Page ──────────────────────────────────────────────────────────────────
 export default function CrystalArtDecorPage() {
-  const [filters, setFilters] = useState({ material: ALL, series: ALL, availability: ALL });
-  const [inquireProduct, setInquireProduct] = useState(null);
-  const setFilter = (key) => (val) => setFilters(f => ({ ...f, [key]: val }));
+  const [filters, setFilters]             = useState({ material: ALL, series: ALL, availability: ALL });
+  const [inquireProduct, setInquireProduct] = useState<Product | null>(null);
+
+  const setFilter = (key: FilterKey) => (val: string) =>
+    setFilters(f => ({ ...f, [key]: val }));
 
   const filtered = products.filter(p =>
-    (filters.material === ALL || p.material.includes(filters.material)) &&
-    (filters.series === ALL || p.series === filters.series) &&
+    (filters.material     === ALL || p.material.includes(filters.material)) &&
+    (filters.series       === ALL || p.series       === filters.series) &&
     (filters.availability === ALL || p.availability === filters.availability)
   );
 
@@ -540,89 +475,35 @@ export default function CrystalArtDecorPage() {
           to   { opacity: 1; transform: translateY(0); }
         }
 
-        .cad-root {
-          background: #faf8f5; min-height: 100vh;
-          color: #1a1020; font-family: 'Jost', sans-serif;
-        }
+        .cad-root { background: #faf8f5; min-height: 100vh; color: #1a1020; font-family: 'Jost', sans-serif; }
 
-        /* HERO */
         .cad-hero {
           padding: 40px 52px 36px; max-width: 1300px; margin: 0 auto;
           border-bottom: 1px solid rgba(107,63,160,0.08);
           display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
         }
-        .cad-eyebrow {
-          font-size: 9px; letter-spacing: 0.36em; text-transform: uppercase;
-          color: #9b6fe0; margin-bottom: 8px; font-weight: 300;
-        }
-        .cad-title {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(32px, 4.5vw, 52px); font-weight: 400;
-          line-height: 1.05; color: #1a1020; letter-spacing: 0.02em;
-        }
+        .cad-eyebrow { font-size: 9px; letter-spacing: 0.36em; text-transform: uppercase; color: #9b6fe0; margin-bottom: 8px; font-weight: 300; }
+        .cad-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 4.5vw, 52px); font-weight: 400; line-height: 1.05; color: #1a1020; letter-spacing: 0.02em; }
         .cad-title em { font-style: italic; font-weight: 300; color: #6b3fa0; }
-        .cad-hero-sub {
-          font-size: 11.5px; font-weight: 300; color: #a090b8;
-          letter-spacing: 0.04em; line-height: 1.7; max-width: 260px; text-align: right;
-        }
+        .cad-hero-sub { font-size: 11.5px; font-weight: 300; color: #a090b8; letter-spacing: 0.04em; line-height: 1.7; max-width: 260px; text-align: right; }
 
-        /* FILTER BAR */
         .cad-filterbar {
-          padding: 14px 52px;
-          border-bottom: 1px solid rgba(107,63,160,0.07);
-          display: flex; align-items: center; justify-content: space-between;
-          gap: 14px; flex-wrap: wrap;
-          background: rgba(250,248,245,0.92);
-          backdrop-filter: blur(10px);
-          position: sticky; top: 0; z-index: 50;
-          box-shadow: 0 1px 0 rgba(107,63,160,0.06);
+          padding: 14px 52px; border-bottom: 1px solid rgba(107,63,160,0.07);
+          display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+          background: rgba(250,248,245,0.92); backdrop-filter: blur(10px);
+          position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 0 rgba(107,63,160,0.06);
         }
         .cad-filterbar-left { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
-        .cad-clear {
-          font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 400;
-          letter-spacing: 0.14em; text-transform: uppercase;
-          color: rgba(107,63,160,0.45); background: none; border: none;
-          cursor: pointer; padding: 4px 8px; transition: color 0.2s;
-          text-decoration: underline; text-underline-offset: 3px;
-        }
+        .cad-clear { font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(107,63,160,0.45); background: none; border: none; cursor: pointer; padding: 4px 8px; transition: color 0.2s; text-decoration: underline; text-underline-offset: 3px; }
         .cad-clear:hover { color: #6b3fa0; }
-        .cad-showing {
-          font-family: 'Jost', sans-serif; font-size: 10.5px; font-weight: 300;
-          font-style: italic; color: rgba(107,63,160,0.4);
-          letter-spacing: 0.04em; white-space: nowrap;
-        }
+        .cad-showing { font-family: 'Jost', sans-serif; font-size: 10.5px; font-weight: 300; font-style: italic; color: rgba(107,63,160,0.4); letter-spacing: 0.04em; white-space: nowrap; }
 
-        /* GRID */
         .cad-grid-wrap { padding: 36px 52px 88px; max-width: 1300px; margin: 0 auto; }
-        .cad-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-        }
+        .cad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 
-        /* FOOTER */
-        .cad-footer {
-          border-top: 1px solid rgba(107,63,160,0.08);
-          padding: 36px 52px 52px;
-          display: flex; align-items: center; justify-content: space-between; gap: 24px;
-          max-width: 1300px; margin: 0 auto;
-        }
-        .cad-footer-text {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 16px; font-style: italic; font-weight: 300;
-          color: #b0a0c8; letter-spacing: 0.04em;
-        }
-        .cad-footer-btn {
-          display: inline-flex; align-items: center; gap: 10px;
-          padding: 12px 26px;
-          font-family: 'Jost', sans-serif; font-size: 9px; font-weight: 500;
-          letter-spacing: 0.24em; text-transform: uppercase;
-          color: #6b3fa0; border: 1.5px solid rgba(107,63,160,0.35);
-          border-radius: 2px; cursor: pointer; text-decoration: none;
-          background-image: linear-gradient(to right, #6b3fa0 50%, transparent 50%);
-          background-size: 200% 100%; background-position: right center;
-          transition: background-position 0.45s cubic-bezier(0.4,0,0.2,1), color 0.4s, border-color 0.4s;
-        }
+        .cad-footer { border-top: 1px solid rgba(107,63,160,0.08); padding: 36px 52px 52px; display: flex; align-items: center; justify-content: space-between; gap: 24px; max-width: 1300px; margin: 0 auto; }
+        .cad-footer-text { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; font-weight: 300; color: #b0a0c8; letter-spacing: 0.04em; }
+        .cad-footer-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 26px; font-family: 'Jost', sans-serif; font-size: 9px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: #6b3fa0; border: 1.5px solid rgba(107,63,160,0.35); border-radius: 2px; cursor: pointer; text-decoration: none; background-image: linear-gradient(to right, #6b3fa0 50%, transparent 50%); background-size: 200% 100%; background-position: right center; transition: background-position 0.45s cubic-bezier(0.4,0,0.2,1), color 0.4s, border-color 0.4s; }
         .cad-footer-btn:hover { background-position: left center; color: #fff; border-color: #6b3fa0; }
 
         @media (max-width: 960px) {
@@ -631,9 +512,7 @@ export default function CrystalArtDecorPage() {
           .cad-hero { flex-direction: column; align-items: flex-start; }
           .cad-hero-sub { text-align: left; max-width: 100%; }
         }
-        @media (max-width: 560px) {
-          .cad-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 560px) { .cad-grid { grid-template-columns: 1fr; } }
       `}</style>
 
       {inquireProduct && (
@@ -642,7 +521,6 @@ export default function CrystalArtDecorPage() {
 
       <div className="cad-root">
 
-        {/* Hero */}
         <div className="cad-hero">
           <div>
             <p className="cad-eyebrow">Nithyasoori · Wall &amp; Shelf Pieces</p>
@@ -653,7 +531,6 @@ export default function CrystalArtDecorPage() {
           </p>
         </div>
 
-        {/* Filters */}
         <div className="cad-filterbar">
           <div className="cad-filterbar-left">
             <FilterDropdown label="Material"     options={FILTERS.material}     value={filters.material}     onChange={setFilter("material")} />
@@ -668,7 +545,6 @@ export default function CrystalArtDecorPage() {
           <span className="cad-showing">Showing {filtered.length} of {products.length} works</span>
         </div>
 
-        {/* Grid */}
         <div className="cad-grid-wrap">
           <div className="cad-grid">
             {filtered.length === 0 ? (
@@ -683,7 +559,6 @@ export default function CrystalArtDecorPage() {
           </div>
         </div>
 
-        {/* Footer CTA */}
         <div className="cad-footer">
           <span className="cad-footer-text">Can't find what you're looking for? We take custom commissions.</span>
           <a href="/contact" className="cad-footer-btn">
