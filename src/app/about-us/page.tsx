@@ -22,11 +22,9 @@ const App: React.FC = () => {
       <ElegantNavbar />
        <FlowingMenu/>
        {/* <EmpavaiHero /> */}
-        <ArtistryHero 
-         videoSrc="/images/videos/video-1.mp4"
-  image1Src="/images/p-1.jpeg"   // tall portrait image (optional)
-  image2Src="/images/p-2.jpeg"
-       />
+       <ArtistryHero 
+  videoSrc="/images/videos/video-1.mp4"
+/>
        <EmpavaiAbout />
         <ArtistSection />
        <CuratedSection />
