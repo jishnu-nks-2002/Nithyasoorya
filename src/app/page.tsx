@@ -47,7 +47,7 @@ const App: React.FC = () => {
        
         
 
-        <InfinityScrollGallery />
+        {/* <InfinityScrollGallery /> */}
         <GallerySection />
         
        

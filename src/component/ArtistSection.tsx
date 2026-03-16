@@ -1,4 +1,17 @@
+'use client';
+
 import { useRef } from "react";
+import Image from "next/image";
+import { Bebas_Neue, Lato, Cormorant_Garamond } from "next/font/google";
+
+const bebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"], display: "swap" });
+const lato = Lato({ weight: ["300", "400"], subsets: ["latin"], display: "swap" });
+const cormorant = Cormorant_Garamond({
+  weight: ["300", "400", "600"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 const artist = {
   name: "Kavya Nair",
@@ -22,8 +35,6 @@ export default function ArtistSection() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Lato:wght@300;400&display=swap');
-
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
@@ -37,13 +48,11 @@ export default function ArtistSection() {
 
         .as-root {
           background: var(--deep);
-          font-family: 'Lato', sans-serif;
           color: var(--cream);
           position: relative;
           overflow: hidden;
         }
 
-        /* ambient glows */
         .as-glow1 {
           position: absolute; width: 700px; height: 700px; border-radius: 50%;
           background: radial-gradient(circle, rgba(107,63,160,0.16) 0%, transparent 70%);
@@ -62,12 +71,11 @@ export default function ArtistSection() {
 
         .as-inner {
           position: relative; z-index: 2;
-          padding: 88px 60px 88px;
+          padding: 88px 60px;
           max-width: 1200px;
           margin: 0 auto;
         }
 
-        /* ── HEADER ── */
         .as-header {
           display: flex; align-items: flex-end;
           justify-content: space-between;
@@ -75,40 +83,29 @@ export default function ArtistSection() {
         }
         .as-eyebrow {
           font-size: 9px; letter-spacing: 0.36em;
-          text-transform: uppercase;
-          color: rgba(192,132,252,0.55);
+          text-transform: uppercase; color: rgba(192,132,252,0.55);
           margin-bottom: 12px; font-weight: 300;
         }
         .as-heading {
-          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(34px, 4.5vw, 54px);
           font-weight: 400; line-height: 1.05;
           color: var(--cream); letter-spacing: 0.02em;
         }
-        .as-heading em {
-          font-style: italic; color: var(--purple-light); font-weight: 300;
-        }
+        .as-heading em { font-style: italic; color: var(--purple-light); font-weight: 300; }
         .as-header-sub {
           max-width: 280px; text-align: right;
           font-size: 11.5px; font-weight: 300;
-          line-height: 1.85; color: var(--muted);
-          letter-spacing: 0.03em;
+          line-height: 1.85; color: var(--muted); letter-spacing: 0.03em;
         }
 
-        .as-divider {
-          width: 100%; height: 1px;
-          background: var(--border); margin-bottom: 56px;
-        }
+        .as-divider { width: 100%; height: 1px; background: var(--border); margin-bottom: 56px; }
 
-        /* ── MAIN GRID ── */
         .as-grid {
           display: grid;
           grid-template-columns: 320px 1fr;
-          gap: 64px;
-          align-items: start;
+          gap: 64px; align-items: start;
         }
 
-        /* ── LEFT: portrait stack ── */
         .as-left { display: flex; flex-direction: column; gap: 14px; }
 
         .as-portrait {
@@ -130,41 +127,31 @@ export default function ArtistSection() {
           position: absolute; inset: 0;
           background: linear-gradient(to bottom, transparent 55%, rgba(10,3,22,0.75) 100%);
         }
-        .as-portrait-name {
-          position: absolute; bottom: 18px; left: 18px; z-index: 2;
-        }
+        .as-portrait-name { position: absolute; bottom: 18px; left: 18px; z-index: 2; }
         .as-portrait-name strong {
           display: block;
-          font-family: 'Cormorant Garamond', serif;
           font-size: 20px; font-weight: 400;
           color: var(--cream); letter-spacing: 0.05em;
         }
         .as-portrait-name span {
           font-size: 9px; letter-spacing: 0.22em;
-          text-transform: uppercase;
-          color: rgba(192,132,252,0.6);
-          font-weight: 300;
+          text-transform: uppercase; color: rgba(192,132,252,0.6); font-weight: 300;
         }
         .as-tag-pill {
           position: absolute; top: 16px; left: 16px; z-index: 2;
           padding: 5px 12px;
           background: rgba(107,63,160,0.55);
           border: 1px solid rgba(192,132,252,0.25);
-          border-radius: 2px;
-          font-size: 8px; letter-spacing: 0.2em;
+          border-radius: 2px; font-size: 8px; letter-spacing: 0.2em;
           text-transform: uppercase; color: var(--purple-light);
           backdrop-filter: blur(6px);
         }
 
-        /* mini works row */
-        .as-works-row {
-          display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
-        }
+        .as-works-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
         .as-work-thumb {
           position: relative; overflow: hidden;
           border-radius: 3px; aspect-ratio: 1/1;
-          border: 1px solid var(--border);
-          cursor: pointer;
+          border: 1px solid var(--border); cursor: pointer;
         }
         .as-work-thumb img {
           width: 100%; height: 100%; object-fit: cover; display: block;
@@ -176,42 +163,32 @@ export default function ArtistSection() {
           transform: scale(1.06);
         }
         .as-work-thumb::after {
-          content: '';
-          position: absolute; inset: 0;
+          content: ''; position: absolute; inset: 0;
           background: rgba(60,10,100,0.2);
         }
         .as-work-label {
           font-size: 8px; letter-spacing: 0.16em;
-          text-transform: uppercase; color: rgba(192,132,252,0.4);
-          font-weight: 300;
+          text-transform: uppercase; color: rgba(192,132,252,0.4); font-weight: 300;
         }
 
-        /* ── RIGHT: detail ── */
         .as-right { display: flex; flex-direction: column; gap: 32px; }
 
-        .as-name-block {}
         .as-name {
-          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(40px, 5.5vw, 68px);
           font-weight: 400; line-height: 0.95;
           color: var(--cream); letter-spacing: 0.02em;
         }
         .as-name-title {
-          font-family: 'Cormorant Garamond', serif;
           font-style: italic; font-weight: 300;
           font-size: clamp(16px, 2vw, 22px);
-          color: var(--purple-light);
-          letter-spacing: 0.06em;
+          color: var(--purple-light); letter-spacing: 0.06em;
           margin-top: 8px; display: block;
         }
         .as-specialty {
-          font-size: 9px; letter-spacing: 0.26em;
-          text-transform: uppercase;
-          color: rgba(192,132,252,0.4);
-          font-weight: 300; margin-top: 16px;
+          font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase;
+          color: rgba(192,132,252,0.4); font-weight: 300; margin-top: 16px;
         }
 
-        /* horizontal rule */
         .as-rule {
           width: 48px; height: 1px;
           background: linear-gradient(to right, var(--purple-light), transparent);
@@ -219,7 +196,6 @@ export default function ArtistSection() {
         }
 
         .as-bio {
-          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(15px, 1.5vw, 18px);
           font-weight: 300; font-style: italic;
           line-height: 1.9; color: rgba(210,195,240,0.62);
@@ -228,7 +204,6 @@ export default function ArtistSection() {
           border-left: 1px solid rgba(192,132,252,0.18);
         }
 
-        /* stats */
         .as-stats {
           display: flex; gap: 0;
           border-top: 1px solid var(--border);
@@ -240,76 +215,56 @@ export default function ArtistSection() {
         }
         .as-stat:last-child { border-right: none; }
         .as-stat-val {
-          font-family: 'Bebas Neue', sans-serif;
           font-size: 44px; letter-spacing: 0.06em;
           color: var(--cream); line-height: 1;
         }
-        .as-stat-val sup {
-          font-size: 18px; color: var(--purple-light);
-          vertical-align: super;
-        }
+        .as-stat-val sup { font-size: 18px; color: var(--purple-light); vertical-align: super; }
         .as-stat-label {
           font-size: 8.5px; letter-spacing: 0.22em;
-          text-transform: uppercase; color: var(--muted);
-          margin-top: 5px; font-weight: 300;
+          text-transform: uppercase; color: var(--muted); margin-top: 5px; font-weight: 300;
         }
 
-        /* quote */
         .as-quote {
           position: relative; padding: 28px 28px 28px 32px;
           background: rgba(107,63,160,0.08);
-          border-radius: 3px;
-          border: 1px solid rgba(192,132,252,0.1);
+          border-radius: 3px; border: 1px solid rgba(192,132,252,0.1);
         }
         .as-quote::before {
           content: '"';
           position: absolute; top: -8px; left: 18px;
-          font-family: 'Cormorant Garamond', serif;
           font-size: 80px; line-height: 1;
           color: rgba(192,132,252,0.15); pointer-events: none;
         }
         .as-quote p {
-          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(16px, 1.8vw, 20px);
           font-style: italic; font-weight: 300;
-          line-height: 1.75; color: rgba(220,205,245,0.6);
-          letter-spacing: 0.03em;
+          line-height: 1.75; color: rgba(220,205,245,0.6); letter-spacing: 0.03em;
         }
         .as-quote cite {
           display: block; margin-top: 12px;
-          font-size: 9px; letter-spacing: 0.22em;
-          text-transform: uppercase;
-          color: rgba(192,132,252,0.4);
-          font-style: normal;
+          font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+          color: rgba(192,132,252,0.4); font-style: normal;
         }
 
-        /* actions */
         .as-actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
 
         .as-btn-fill {
           display: inline-flex; align-items: center; gap: 10px;
           padding: 14px 30px;
-          font-family: 'Lato', sans-serif;
           font-size: 9px; font-weight: 400;
           letter-spacing: 0.26em; text-transform: uppercase;
           color: var(--purple-light);
           border: 1px solid rgba(192,132,252,0.3);
           border-radius: 2px; cursor: pointer; text-decoration: none;
           background: linear-gradient(to right, var(--purple) 50%, transparent 50%);
-          background-size: 200% 100%;
-          background-position: right center;
-          transition: background-position 0.45s cubic-bezier(0.4,0,0.2,1),
-                      color 0.4s ease, border-color 0.4s ease;
+          background-size: 200% 100%; background-position: right center;
+          transition: background-position 0.45s cubic-bezier(0.4,0,0.2,1), color 0.4s ease, border-color 0.4s ease;
         }
-        .as-btn-fill:hover {
-          background-position: left center; color: #fff;
-          border-color: var(--purple);
-        }
+        .as-btn-fill:hover { background-position: left center; color: #fff; border-color: var(--purple); }
 
         .as-btn-ghost {
           display: inline-flex; align-items: center; gap: 10px;
           padding: 14px 20px;
-          font-family: 'Lato', sans-serif;
           font-size: 9px; font-weight: 400;
           letter-spacing: 0.26em; text-transform: uppercase;
           color: rgba(190,165,230,0.45);
@@ -318,12 +273,8 @@ export default function ArtistSection() {
           cursor: pointer;
           transition: color 0.3s ease, border-color 0.3s ease;
         }
-        .as-btn-ghost:hover {
-          color: var(--purple-light);
-          border-color: var(--purple-light);
-        }
+        .as-btn-ghost:hover { color: var(--purple-light); border-color: var(--purple-light); }
 
-        /* bottom strip */
         .as-strip {
           margin-top: 56px; padding-top: 28px;
           border-top: 1px solid var(--border);
@@ -331,17 +282,12 @@ export default function ArtistSection() {
           justify-content: space-between; gap: 20px;
         }
         .as-strip-text {
-          font-family: 'Cormorant Garamond', serif;
           font-size: 12px; font-style: italic;
           color: rgba(180,150,230,0.3); letter-spacing: 0.04em;
         }
-        .as-strip-right {
-          display: flex; align-items: center; gap: 20px;
-        }
+        .as-strip-right { display: flex; align-items: center; gap: 20px; }
         .as-strip-num {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: 13px; letter-spacing: 0.18em;
-          color: rgba(192,132,252,0.25);
+          font-size: 13px; letter-spacing: 0.18em; color: rgba(192,132,252,0.25);
         }
 
         @media (max-width: 900px) {
@@ -357,7 +303,7 @@ export default function ArtistSection() {
         }
       `}</style>
 
-      <section className="as-root" ref={rootRef}>
+      <section className={`as-root ${lato.className}`} ref={rootRef}>
         <div className="as-glow1" />
         <div className="as-glow2" />
         <div className="as-grain" />
@@ -368,7 +314,7 @@ export default function ArtistSection() {
           <div className="as-header">
             <div>
               <p className="as-eyebrow">The Maker</p>
-              <h2 className="as-heading">
+              <h2 className={`as-heading ${cormorant.className}`}>
                 Artist in<br /><em>Residence</em>
               </h2>
             </div>
@@ -386,9 +332,15 @@ export default function ArtistSection() {
             <div className="as-left">
               <div className="as-portrait">
                 <span className="as-tag-pill">{artist.tag}</span>
-                <img src={artist.img} alt={artist.name} />
+                <Image
+                  src={artist.img}
+                  alt={artist.name}
+                  fill
+                  sizes="320px"
+                  style={{ objectFit: "cover", filter: "saturate(0.72) brightness(0.82)" }}
+                />
                 <div className="as-portrait-name">
-                  <strong>{artist.name}</strong>
+                  <strong className={cormorant.className}>{artist.name}</strong>
                   <span>{artist.title}</span>
                 </div>
               </div>
@@ -397,7 +349,13 @@ export default function ArtistSection() {
               <div className="as-works-row">
                 {[artist.featured1, artist.featured2, artist.featured3].map((src, i) => (
                   <div key={i} className="as-work-thumb">
-                    <img src={src} alt={`Work ${i + 1}`} />
+                    <Image
+                      src={src}
+                      alt={`Work ${i + 1}`}
+                      fill
+                      sizes="100px"
+                      style={{ objectFit: "cover", filter: "saturate(0.6) brightness(0.7)" }}
+                    />
                   </div>
                 ))}
               </div>
@@ -406,47 +364,47 @@ export default function ArtistSection() {
             {/* RIGHT */}
             <div className="as-right">
 
-              <div className="as-name-block">
-                <h3 className="as-name">{artist.name}</h3>
-                <span className="as-name-title">{artist.title}</span>
+              <div>
+                <h3 className={`as-name ${cormorant.className}`}>{artist.name}</h3>
+                <span className={`as-name-title ${cormorant.className}`}>{artist.title}</span>
                 <p className="as-specialty">{artist.specialty}</p>
               </div>
 
               <div className="as-rule" />
 
-              <p className="as-bio">{artist.bio}</p>
+              <p className={`as-bio ${cormorant.className}`}>{artist.bio}</p>
 
               {/* Stats */}
               <div className="as-stats">
                 <div className="as-stat">
-                  <div className="as-stat-val">{artist.works}<sup>+</sup></div>
+                  <div className={`as-stat-val ${bebasNeue.className}`}>{artist.works}<sup>+</sup></div>
                   <div className="as-stat-label">Works Created</div>
                 </div>
                 <div className="as-stat">
-                  <div className="as-stat-val">{artist.years}<sup>yr</sup></div>
+                  <div className={`as-stat-val ${bebasNeue.className}`}>{artist.years}<sup>yr</sup></div>
                   <div className="as-stat-label">Years Active</div>
                 </div>
                 <div className="as-stat">
-                  <div className="as-stat-val">{artist.collectors}<sup>+</sup></div>
+                  <div className={`as-stat-val ${bebasNeue.className}`}>{artist.collectors}<sup>+</sup></div>
                   <div className="as-stat-label">Collectors</div>
                 </div>
               </div>
 
               {/* Quote */}
               <div className="as-quote">
-                <p>{artist.quote}</p>
+                <p className={cormorant.className}>{artist.quote}</p>
                 <cite>— {artist.name}</cite>
               </div>
 
               {/* Actions */}
               <div className="as-actions">
-                <a href="#contact" className="as-btn-fill">
+                <a href="#contact" className={`as-btn-fill ${lato.className}`}>
                   Commission a Work
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
                   </svg>
                 </a>
-                <button className="as-btn-ghost">
+                <button className={`as-btn-ghost ${lato.className}`}>
                   View Full Portfolio
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
@@ -459,11 +417,11 @@ export default function ArtistSection() {
 
           {/* Bottom strip */}
           <div className="as-strip">
-            <span className="as-strip-text">
+            <span className={`as-strip-text ${cormorant.className}`}>
               Empavai Studio · Kerala, India · Est. 2016
             </span>
             <div className="as-strip-right">
-              <span className="as-strip-num">01 / 01</span>
+              <span className={`as-strip-num ${bebasNeue.className}`}>01 / 01</span>
             </div>
           </div>
 

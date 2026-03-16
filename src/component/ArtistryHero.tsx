@@ -1,4 +1,16 @@
+'use client';
+
 import { useEffect, useRef, useState } from "react";
+import { Bebas_Neue, Lato, Cormorant_Garamond } from "next/font/google";
+
+const bebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"], display: "swap" });
+const lato = Lato({ weight: ["300", "400"], subsets: ["latin"], display: "swap" });
+const cormorant = Cormorant_Garamond({
+  weight: ["300", "400"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 interface ArtistryHeroProps {
   videoSrc?: string;
@@ -12,6 +24,13 @@ const CAROUSEL_WORDS = [
   { word: "METAMORPHOSIS", sub: "THE SLOW UNFOLDING OF MATTER INTO MEANING AND SACRED BEAUTY" },
   { word: "SACRED",        sub: "ANCIENT MINERAL WISDOM DISTILLED INTO OBJECTS OF DEVOTION" },
 ];
+
+const MARQUEE_ITEMS = [
+  "METAMORPHOSIS","✦","FROZEN LIGHT","✦","ANCIENT FORMATION","✦",
+  "ALCHEMY OF STONE","✦","EMPAVAI STUDIO","✦","GEOLOGICAL ART","✦",
+  "SACRED SPACES","✦","CRYSTAL WISDOM","✦",
+];
+const MARQUEE_TRACK = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
 
 export default function ArtistryHero({ videoSrc = "/your-video.mp4" }: ArtistryHeroProps) {
   const [loaded, setLoaded] = useState(false);
@@ -59,51 +78,34 @@ export default function ArtistryHero({ videoSrc = "/your-video.mp4" }: ArtistryH
     return { opacity: 1, transform: "translateY(0)", transition: T };
   };
 
-  const marqueeItems = [
-    "METAMORPHOSIS","✦","FROZEN LIGHT","✦","ANCIENT FORMATION","✦",
-    "ALCHEMY OF STONE","✦","EMPAVAI STUDIO","✦","GEOLOGICAL ART","✦",
-    "SACRED SPACES","✦","CRYSTAL WISDOM","✦",
-  ];
-  const track = [...marqueeItems, ...marqueeItems, ...marqueeItems];
-
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Bebas+Neue&family=Lato:wght@300;400&display=swap');
-
         .ah-root {
           position: relative; width: 100%; min-height: 100vh;
           background: #0d0516;
           overflow: hidden; display: flex; flex-direction: column;
-          font-family: 'Lato', sans-serif;
         }
 
-        /* VIDEO */
         .ah-video-wrap { position: absolute; inset: 0; z-index: 0; }
         .ah-video-wrap video {
           width: 100%; height: 100%; object-fit: cover;
           opacity: 0.5; filter: saturate(0.65) brightness(0.55);
         }
 
-        /* OVERLAYS */
         .ah-ov1 {
           position: absolute; inset: 0; z-index: 1;
           background: linear-gradient(to bottom,
-            rgba(10,3,22,0.3) 0%,
-            rgba(10,3,22,0.0) 25%,
-            rgba(10,3,22,0.15) 60%,
-            rgba(10,3,22,0.92) 100%
+            rgba(10,3,22,0.3) 0%, rgba(10,3,22,0.0) 25%,
+            rgba(10,3,22,0.15) 60%, rgba(10,3,22,0.92) 100%
           );
         }
         .ah-ov2 {
           position: absolute; inset: 0; z-index: 2;
           background: radial-gradient(ellipse 80% 80% at 50% 40%, transparent 20%, rgba(6,1,16,0.55) 100%);
         }
-        /* Deep purple tint layer */
-        .ah-ov3 {
-          position: absolute; inset: 0; z-index: 2;
-          background: rgba(60,10,100,0.18);
-        }
+        .ah-ov3 { position: absolute; inset: 0; z-index: 2; background: rgba(60,10,100,0.18); }
+
         .ah-grain {
           position: absolute; inset: -50%; width: 200%; height: 200%;
           background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
@@ -118,65 +120,47 @@ export default function ArtistryHero({ videoSrc = "/your-video.mp4" }: ArtistryH
           80%{transform:translate(1%,-2%)} 90%{transform:translate(3%,4%)}
         }
 
-        /* CONTENT */
         .ah-content {
           position: relative; z-index: 10;
           flex: 1; display: flex; flex-direction: column;
           align-items: center; justify-content: center;
-          text-align: center;
-          padding: 0 32px;
-          min-height: 100vh;
+          text-align: center; padding: 0 32px; min-height: 100vh;
         }
 
-        /* TITLE */
         .ah-title-wrap { overflow: hidden; padding: 8px 0; }
         .ah-title {
-          font-family: 'Bebas Neue', sans-serif;
           font-size: clamp(64px, 14vw, 160px);
           line-height: 0.88;
           color: rgba(238,230,255,0.92);
           text-shadow: 0 0 120px rgba(160,80,255,0.18), 0 2px 60px rgba(0,0,0,0.6);
           display: block;
           will-change: opacity, transform, filter, letter-spacing;
-          /* page load */
           opacity: 0; transform: translateY(36px);
           transition: opacity 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s, transform 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s;
         }
         .loaded .ah-title { opacity: 1; transform: translateY(0); }
 
-        /* SUBTITLE */
         .ah-sub-wrap { margin-top: 28px; min-height: 40px; }
         .ah-sub {
-          font-family: 'Lato', sans-serif;
-          font-size: clamp(9px, 1.1vw, 12px);
-          font-weight: 300;
-          letter-spacing: 0.22em;
-          color: rgba(200,180,240,0.6);
-          text-transform: uppercase;
-          line-height: 1.9;
-          max-width: 420px;
-          margin: 0 auto;
+          font-size: clamp(9px, 1.1vw, 12px); font-weight: 300;
+          letter-spacing: 0.22em; color: rgba(200,180,240,0.6);
+          text-transform: uppercase; line-height: 1.9;
+          max-width: 420px; margin: 0 auto;
           will-change: opacity, transform;
           opacity: 0; transform: translateY(10px);
           transition: opacity 1s ease 0.8s, transform 1s ease 0.8s;
         }
         .loaded .ah-sub { opacity: 1; transform: translateY(0); }
 
-        /* SCROLL HINT */
         .ah-scroll {
-          position: absolute;
-          bottom: 90px;
-          left: 50%;
-          transform: translateX(-50%);
+          position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%);
           display: flex; flex-direction: column; align-items: center; gap: 10px;
-          opacity: 0; transition: opacity 1s ease 1.4s;
-          z-index: 10;
+          opacity: 0; transition: opacity 1s ease 1.4s; z-index: 10;
         }
         .loaded .ah-scroll { opacity: 1; }
         .ah-scroll-label {
-          font-size: 8px; letter-spacing: 0.3em;
-          text-transform: uppercase; color: rgba(180,150,230,0.45);
-          font-weight: 300;
+          font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase;
+          color: rgba(180,150,230,0.45); font-weight: 300;
         }
         .ah-scroll-line {
           width: 1px; height: 36px;
@@ -188,7 +172,6 @@ export default function ArtistryHero({ videoSrc = "/your-video.mp4" }: ArtistryH
           50% { opacity: 1; transform: scaleY(1.15); }
         }
 
-        /* MARQUEE */
         .ah-marquee-outer {
           position: absolute; bottom: 0; left: 0; right: 0;
           z-index: 10; padding: 16px 0 20px;
@@ -209,16 +192,12 @@ export default function ArtistryHero({ videoSrc = "/your-video.mp4" }: ArtistryH
           100% { transform: translateX(-33.333%); }
         }
         .ah-mitem {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: clamp(18px, 2.8vw, 32px);
-          letter-spacing: 0.18em;
-          color: rgba(180,130,255,0.13);
-          padding: 0 22px; display: inline-block;
+          font-size: clamp(18px, 2.8vw, 32px); letter-spacing: 0.18em;
+          color: rgba(180,130,255,0.13); padding: 0 22px; display: inline-block;
           transition: color 0.3s ease; user-select: none;
         }
         .ah-mitem.accent {
-          font-size: clamp(10px, 1.4vw, 16px);
-          color: rgba(192,132,252,0.25);
+          font-size: clamp(10px, 1.4vw, 16px); color: rgba(192,132,252,0.25);
           padding: 0 14px; vertical-align: middle;
         }
         .ah-mitem:hover { color: rgba(192,132,252,0.45); }
@@ -229,11 +208,19 @@ export default function ArtistryHero({ videoSrc = "/your-video.mp4" }: ArtistryH
         }
       `}</style>
 
-      <div className={`ah-root ${loaded ? "loaded" : ""}`}>
+      <div className={`ah-root ${loaded ? "loaded" : ""} ${lato.className}`}>
 
         {/* Video */}
         <div className="ah-video-wrap">
-          <video ref={videoRef} src={videoSrc} autoPlay muted loop playsInline />
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/images/hero-poster.jpg"
+          />
         </div>
 
         {/* Overlays */}
@@ -244,18 +231,15 @@ export default function ArtistryHero({ videoSrc = "/your-video.mp4" }: ArtistryH
 
         {/* Centred content */}
         <div className="ah-content">
-
-          {/* Giant carousel word */}
           <div className="ah-title-wrap">
             <h1
-              className="ah-title"
+              className={`ah-title ${bebasNeue.className}`}
               style={loaded ? titleStyle() : undefined}
             >
               {CAROUSEL_WORDS[index].word}
             </h1>
           </div>
 
-          {/* Subtitle line */}
           <div className="ah-sub-wrap">
             <p
               className="ah-sub"
@@ -264,7 +248,6 @@ export default function ArtistryHero({ videoSrc = "/your-video.mp4" }: ArtistryH
               {CAROUSEL_WORDS[index].sub}
             </p>
           </div>
-
         </div>
 
         {/* Scroll hint */}
@@ -275,8 +258,8 @@ export default function ArtistryHero({ videoSrc = "/your-video.mp4" }: ArtistryH
 
         {/* Marquee */}
         <div className="ah-marquee-outer" aria-hidden="true">
-          <div className="ah-marquee-track">
-            {track.map((item, i) => (
+          <div className={`ah-marquee-track ${bebasNeue.className}`}>
+            {MARQUEE_TRACK.map((item, i) => (
               <span key={i} className={`ah-mitem${item === "✦" ? " accent" : ""}`}>
                 {item}
               </span>
