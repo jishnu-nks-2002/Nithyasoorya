@@ -38,8 +38,7 @@ const App: React.FC = () => {
 />
         {/* <ArtistryHero 
                 videoSrc="/images/videos/video-1.mp4"
-         image1Src="/images/p-1.jpeg"   // tall portrait image (optional)
-         image2Src="/images/p-2.jpeg"
+      
               /> */}
       <ProductDetailPage />
     
