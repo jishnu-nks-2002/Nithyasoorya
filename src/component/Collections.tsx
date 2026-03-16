@@ -92,7 +92,12 @@ const products = [
   },
 ];
 
-function FilterDropdown({ label, options, value, onChange }) {
+function FilterDropdown({ label, options, value, onChange }: {
+  label: string;
+  options: string[];
+  value: string;
+  onChange: (val: string) => void;
+}) {
   const [open, setOpen] = useState(false);
   const active = value !== ALL;
   return (
