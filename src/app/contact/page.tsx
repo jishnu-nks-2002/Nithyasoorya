@@ -27,7 +27,11 @@ const App: React.FC = () => {
   <CustomCursor />
       <ElegantNavbar />
        <FlowingMenu/>
-       <ProductBreadcrumb/>
+     
+<ProductBreadcrumb 
+  items={[{ label: "Home", href: "/" }, { label: "Contact", href: "/contact" }]}
+  productName="Contact"
+/>
       
       <ConnectSection />
     

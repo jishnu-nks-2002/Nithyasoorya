@@ -25,10 +25,10 @@ const App: React.FC = () => {
   <CustomCursor />
       <ElegantNavbar />
        <FlowingMenu/>
-        <ArtistryHero 
+        {/* <ArtistryHero 
                 videoSrc="/images/videos/video-1.mp4"
          
-              />
+              /> */}
       
     
       
