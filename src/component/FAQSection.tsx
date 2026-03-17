@@ -45,7 +45,7 @@ const faqs = [
   },
 ];
 
-function AnimatedImage({ src, alt }) {
+function AnimatedImage({ src, alt }: { src: string; alt: string }) {  
   const ref = useRef(null);
   const prevSrc = useRef(null);
 
@@ -82,7 +82,12 @@ function AnimatedImage({ src, alt }) {
   );
 }
 
-function FAQItem({ faq, isOpen, onToggle, index }) {
+function FAQItem({ faq, isOpen, onToggle, index }: {
+  faq: typeof faqs[0];
+  isOpen: boolean;
+  onToggle: () => void;
+  index: number;
+}) {
   const contentRef = useRef(null);
   const [height, setHeight] = useState(0);
   const [hovered, setHovered] = useState(false);
