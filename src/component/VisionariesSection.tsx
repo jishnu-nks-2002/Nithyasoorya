@@ -29,7 +29,7 @@ const galleryItems = [
 
 export default function App() {
   const [openFaq, setOpenFaq] = useState(null);
-  const [lightbox, setLightbox] = useState(null);
+  const [lightbox, setLightbox] = useState<typeof GALLERY[0] | null>(null);
   const [filter, setFilter] = useState("all");
 
   const filtered = filter === "all" ? galleryItems : galleryItems.filter(i => i.type === filter);
