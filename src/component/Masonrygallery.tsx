@@ -87,7 +87,7 @@ function FAQItem({ faq, isOpen, onToggle, index }: {
   onToggle: () => void;
   index: number;
 }) {
-  const contentRef = useRef(null);
+ const contentRef = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useState(0);
   const [hovered, setHovered] = useState(false);
 
