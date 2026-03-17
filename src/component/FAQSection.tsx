@@ -46,8 +46,8 @@ const faqs = [
 ];
 
 function AnimatedImage({ src, alt }: { src: string; alt: string }) {  
-  const ref = useRef(null);
-  const prevSrc = useRef(null);
+  const ref = useRef<HTMLImageElement | null>(null);
+ const prevSrc = useRef<string | null>(null);
 
   useEffect(() => {
     const el = ref.current;
