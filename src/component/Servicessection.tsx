@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import type { CSSProperties, JSX } from "react"
+import React, { useEffect, useRef, useState } from "react"
+import type { JSX } from "react"
 
 /* ───────────────── TYPES ───────────────── */
 interface Service {
@@ -124,7 +124,7 @@ function FillButton({ accent }: { accent: string }): JSX.Element {
 }
 
 /* ───────────────── SMOOTH SCROLL HOOK ───────────────── */
-function useSmoothScrollProgress(ref: React.RefObject<HTMLElement>) {
+function useSmoothScrollProgress(ref: React.RefObject<HTMLDivElement | null>) {
   const [progress, setProgress] = useState(0)
   const progressRef = useRef(0)
 
@@ -230,7 +230,6 @@ function ServiceCard({
       <div
         style={{
           background: service.bg,
-          
           overflow: "hidden",
           display: "grid",
           gridTemplateColumns: "340px 1fr",
@@ -272,7 +271,6 @@ function ServiceCard({
             ✦ {service.result}
           </div>
 
-          {/* ✅ NEW PREMIUM BUTTON */}
           <div style={{ marginTop: 12 }}>
             <FillButton accent={service.accent} />
           </div>
