@@ -334,7 +334,7 @@ export default function ProductCarousel(): JSX.Element {
     autoRef.current = setInterval(() => {
       if (!isPaused.current) advance(1);
     }, AUTO_INTERVAL);
-    return () => clearInterval(autoRef.current);
+    return () => { if (autoRef.current !== null) clearInterval(autoRef.current); };
   }, [advance]);
 
   const pauseAuto = () => { isPaused.current = true; };
