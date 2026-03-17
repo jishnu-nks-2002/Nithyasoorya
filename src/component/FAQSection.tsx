@@ -217,7 +217,7 @@ const contentRef = useRef<HTMLDivElement | null>(null);
 }
 
 export default function FAQSection() {
-  const [openId, setOpenId] = useState(1);
+const [openId, setOpenId] = useState<number | null>(1);
   const activeItem = faqs.find(f => f.id === openId) || faqs[0];
   const accentItem = faqs[(faqs.findIndex(f => f.id === activeItem.id) + 2) % faqs.length];
 
