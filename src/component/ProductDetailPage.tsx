@@ -7,17 +7,27 @@ const STONES = [
   "Tiger's Eye", "Onyx", "Jasper", "Selenite", "Pyrite",
 ];
 
-function InquireModal({ productName, onClose }) {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", stones: [], description: "" });
+type FormState = {
+  name: string;
+  email: string;
+  phone: string;
+  stones: string[];
+  description: string;
+};
+
+type FocusedField = "name" | "email" | "phone" | "stones" | "description" | null;
+
+function InquireModal({ productName, onClose }: { productName: string; onClose: () => void }) {
+  const [form, setForm] = useState<FormState>({ name: "", email: "", phone: "", stones: [], description: "" });
   const [stoneSearch, setStoneSearch] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [focused, setFocused] = useState(null);
+  const [focused, setFocused] = useState<FocusedField>(null);
 
   const filteredStones = STONES.filter(s =>
     s.toLowerCase().includes(stoneSearch.toLowerCase())
   );
 
-  const toggleStone = (stone) => {
+  const toggleStone = (stone: string) => {
     setForm(f => ({
       ...f,
       stones: f.stones.includes(stone)
@@ -131,30 +141,33 @@ function InquireModal({ productName, onClose }) {
 
               {/* Name + Email row */}
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                {[
-                  { key: "name", label: "Full Name", placeholder: "Your name", type: "text" },
-                  { key: "email", label: "Email Address", placeholder: "you@example.com", type: "email" },
-                ].map(({ key, label, placeholder, type }) => (
-                  <div key={key} style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-                    <label style={{ fontFamily: "'Jost', sans-serif", fontSize: 8.5, letterSpacing: "0.26em", textTransform: "uppercase", color: focused === key ? "#6b3fa0" : "#b0a0cc", transition: "color 0.2s" }}>{label}</label>
-                    <input
-                      type={type}
-                      placeholder={placeholder}
-                      value={form[key]}
-                      onFocus={() => setFocused(key)}
-                      onBlur={() => setFocused(null)}
-                      onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
-                      style={{
-                        fontFamily: "'Jost', sans-serif", fontSize: 12.5, fontWeight: 300,
-                        color: "#1a1030", background: "#fff",
-                        border: `1px solid ${focused === key ? "rgba(107,63,160,0.45)" : "rgba(107,63,160,0.15)"}`,
-                        borderRadius: 4, padding: "10px 14px", outline: "none",
-                        transition: "border-color 0.25s, box-shadow 0.25s",
-                        boxShadow: focused === key ? "0 0 0 3px rgba(107,63,160,0.07)" : "none",
-                      }}
-                    />
-                  </div>
-                ))}
+                {(["name", "email"] as const).map((key) => {
+                  const meta = {
+                    name:  { label: "Full Name",      placeholder: "Your name",        type: "text"  },
+                    email: { label: "Email Address",  placeholder: "you@example.com",  type: "email" },
+                  }[key];
+                  return (
+                    <div key={key} style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                      <label style={{ fontFamily: "'Jost', sans-serif", fontSize: 8.5, letterSpacing: "0.26em", textTransform: "uppercase", color: focused === key ? "#6b3fa0" : "#b0a0cc", transition: "color 0.2s" }}>{meta.label}</label>
+                      <input
+                        type={meta.type}
+                        placeholder={meta.placeholder}
+                        value={form[key]}
+                        onFocus={() => setFocused(key)}
+                        onBlur={() => setFocused(null)}
+                        onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
+                        style={{
+                          fontFamily: "'Jost', sans-serif", fontSize: 12.5, fontWeight: 300,
+                          color: "#1a1030", background: "#fff",
+                          border: `1px solid ${focused === key ? "rgba(107,63,160,0.45)" : "rgba(107,63,160,0.15)"}`,
+                          borderRadius: 4, padding: "10px 14px", outline: "none",
+                          transition: "border-color 0.25s, box-shadow 0.25s",
+                          boxShadow: focused === key ? "0 0 0 3px rgba(107,63,160,0.07)" : "none",
+                        }}
+                      />
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Phone */}
@@ -279,7 +292,7 @@ function InquireModal({ productName, onClose }) {
                     border: `1.5px solid ${(!form.name || !form.email) ? "rgba(107,63,160,0.12)" : "rgba(107,63,160,0.35)"}`,
                     borderRadius: 2, padding: "12px 32px", cursor: (!form.name || !form.email) ? "not-allowed" : "pointer",
                     display: "inline-flex", alignItems: "center", gap: 10,
-                    background: (!form.name || !form.email) ? "none" : "linear-gradient(to right, #6b3fa0 50%, transparent 50%)",
+                    backgroundImage: (!form.name || !form.email) ? "none" : "linear-gradient(to right, #6b3fa0 50%, transparent 50%)",
                     backgroundSize: "200% 100%", backgroundPosition: "right center",
                     transition: "background-position 0.45s cubic-bezier(0.4,0,0.2,1), color 0.4s ease, border-color 0.4s ease",
                   }}
@@ -348,7 +361,19 @@ Each piece in the Obsidian Dream series is carved from a single block of volcani
   ],
 };
 
-const services = [
+type ServiceItem = {
+  id: number;
+  num: string;
+  category: string;
+  title: string;
+  body: string;
+  cta: string;
+  href: string;
+  img: string;
+  imgRight: boolean;
+};
+
+const services: ServiceItem[] = [
   {
     id: 1,
     num: "01",
@@ -384,11 +409,11 @@ const services = [
   },
 ];
 
-function ServiceBlock({ s, index }) {
+function ServiceBlock({ s, index }: { s: ServiceItem; index: number }) {
   const [hov, setHov] = useState(false);
   const [ctaHov, setCtaHov] = useState(false);
 
-  const imgEl = (radius) => (
+  const imgEl = (radius: string) => (
     <div style={{ position: "relative", overflow: "hidden", borderRadius: radius }}>
       <img
         src={s.img}

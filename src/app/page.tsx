@@ -48,8 +48,8 @@ const App: React.FC = () => {
         
 
         {/* <InfinityScrollGallery /> */}
-        <GallerySection />
-        
+        {/* <GallerySection />
+         */}
        
 
         {/* Full-width products section */}
