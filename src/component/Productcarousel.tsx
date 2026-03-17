@@ -313,7 +313,7 @@ function ProductCard({ product, offsetFromActive, onClick }: CardProps): JSX.Ele
 export default function ProductCarousel(): JSX.Element {
   const [centerIdx, setCenterIdx] = useState(BASE_LEN + 2);
   const [isAnimating, setIsAnimating] = useState(false);
-  const autoRef = useRef<ReturnType<typeof setInterval>>();
+  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isPaused = useRef(false);
 
   const advance = useCallback((dir: 1 | -1) => {
