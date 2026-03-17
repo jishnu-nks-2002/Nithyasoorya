@@ -28,8 +28,8 @@ const galleryItems = [
 ];
 
 export default function App() {
-  const [openFaq, setOpenFaq] = useState(null);
-  const [lightbox, setLightbox] = useState<typeof GALLERY[0] | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [lightbox, setLightbox] = useState<typeof galleryItems[0] | null>(null);
   const [filter, setFilter] = useState("all");
 
   const filtered = filter === "all" ? galleryItems : galleryItems.filter(i => i.type === filter);
@@ -170,7 +170,7 @@ export default function App() {
                   <img src={item.src} alt={item.label} />
                 ) : (
                   <>
-                   <video src={item.src} poster={item.poster} muted loop playsInline autoPlay />
+                    <video src={item.src} poster={item.poster} muted loop playsInline autoPlay />
                     <div className="play-badge">
                       <svg width="14" height="16" viewBox="0 0 14 16" fill="none">
                         <path d="M1 1l12 7-12 7V1z" fill="#f7f5f0" />
